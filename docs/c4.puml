@@ -1,0 +1,36 @@
+@startuml C4
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "User of the system")
+
+System_Boundary(reminde, Reminde) {
+    Container(frontend, Web App, Angular)
+    Container(backend, BackEnd, SpringBoot) {
+        Component(emailService, Email Service)
+        Component(noteService, Note Service)
+        Component(aiService, AI Service)
+        Component(authService, Auth Service)
+    }
+    Container(db, Database, PostgreSQL)
+    Container(ollama, Ollama Api, FastApi)
+    Container(keycloack, KeyCloack, Authentication Service)
+
+    ContainerQueue(queue, "Message Queue", "RabbitMQ")
+}
+
+System_Ext(ses, Amazon SES, Service to send email reminders)
+
+AddRelTag("insideContainer", $textColor=white)
+
+Rel(emailService, ses, Uses, SMTP)
+Rel(frontend, backend, Uses, HTTPS)
+Rel(backend, db, Reads/Writes)
+Rel(user, frontend, Uses, Browser)
+Rel(aiService, ollama, Uses, HTTPS locally, Uses AI to generate reminders and classify them)
+Rel(authService, keycloack, Uses, OAuth2)
+Rel(noteService, queue, Publish Classify Task, AMQP)
+Rel(queue, aiService, Consume Classify Task, AMQP)
+Rel(aiService, queue, Publish Send Email Task, AMQP)
+Rel(queue, emailService, Consume Send Email Task, AMQP)
+@enduml
