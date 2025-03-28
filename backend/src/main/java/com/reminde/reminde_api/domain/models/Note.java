@@ -17,11 +17,11 @@ public class Note {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
-    private final List<Tag> tags = new ArrayList<>();
+    private final List<String> tags = new ArrayList<>();
     private final List<LocalDateTime> reminders = new ArrayList<>();
 
     @Builder
-    public Note(UUID id, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime dueDate, @Singular List<Tag> tags, @Singular List<LocalDateTime> reminders) {
+    public Note(UUID id, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime dueDate, List<String> tags, List<LocalDateTime> reminders) {
         this.id = id;
         this.title = title;
         this.content = content;
