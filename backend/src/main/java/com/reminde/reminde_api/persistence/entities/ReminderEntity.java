@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 public class ReminderEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column

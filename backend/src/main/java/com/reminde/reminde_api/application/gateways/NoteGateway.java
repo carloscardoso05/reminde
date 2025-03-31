@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NoteGateway {
+    List<Note> getNotes();
+
     Note createNote(NoteDto note);
 
     Note updateNote(NoteDto note);
@@ -15,5 +17,5 @@ public interface NoteGateway {
 
     void deleteNoteById(UUID id);
 
-    List<Note> getNotesByUserId(UUID userId);
+    List<Note> getNotesByOwnerId(UUID ownerId);
 }
