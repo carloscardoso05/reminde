@@ -1,7 +1,6 @@
 package com.reminde.reminde_api.persistence.repositories;
 
 import com.reminde.reminde_api.persistence.entities.TagEntity;
-import com.reminde.reminde_api.persistence.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
