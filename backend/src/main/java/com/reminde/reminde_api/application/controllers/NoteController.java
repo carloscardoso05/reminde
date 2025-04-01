@@ -1,8 +1,10 @@
 package com.reminde.reminde_api.application.controllers;
 
 import com.reminde.reminde_api.application.dtos.NoteDto;
+import com.reminde.reminde_api.application.dtos.note.CreateNoteDto;
+import com.reminde.reminde_api.application.mappers.NoteMapper;
 import com.reminde.reminde_api.application.services.NoteService;
-import com.reminde.reminde_api.facades.mappers.NoteMapper;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +13,22 @@ import java.util.List;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
-    private final NoteMapper noteConverter;
+    private final NoteMapper noteMapper;
 
-    public NoteController(NoteService noteService, NoteMapper noteConverter) {
+    public NoteController(NoteService noteService, NoteMapper noteMapper) {
         this.noteService = noteService;
-        this.noteConverter = noteConverter;
+        this.noteMapper = noteMapper;
     }
 
     @GetMapping
     public List<NoteDto> getNotes() {
         return noteService.getNotes().stream()
-                .map(noteConverter::dtoFromModel)
+                .map(noteMapper::toDto)
                 .toList();
     }
 
     @PostMapping
-    public NoteDto createNote(@RequestBody NoteDto note) {
-        return noteConverter.dtoFromModel(noteService.createNote(note));
+    public NoteDto createNote(@Valid @RequestBody CreateNoteDto createNoteDto) {
+        return noteMapper.toDto(noteService.createNote(createNoteDto));
     }
 }
