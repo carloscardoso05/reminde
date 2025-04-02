@@ -16,6 +16,6 @@ public record CreateNoteRequest(
     LocalDate dueDate,
     List<String> tags,
     List<LocalDateTime> reminders,
-    @NotNull(message = "User ID is required")
-    UUID userId
+    @NotNull(message = "Owner ID is required")
+    UUID ownerId
 ) {} 

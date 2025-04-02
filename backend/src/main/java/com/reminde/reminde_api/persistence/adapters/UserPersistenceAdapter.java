@@ -1,9 +1,9 @@
-package com.reminde.reminde_api.persistence.adapter;
+package com.reminde.reminde_api.persistence.adapters;
 
 import com.reminde.reminde_api.application.port.out.UserRepository;
 import com.reminde.reminde_api.domain.model.User;
-import com.reminde.reminde_api.persistence.entity.UserEntity;
-import com.reminde.reminde_api.persistence.mapper.UserMapper;
+import com.reminde.reminde_api.persistence.entities.UserEntity;
+import com.reminde.reminde_api.persistence.mappers.PersistenceUserMapper;
 import com.reminde.reminde_api.persistence.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,24 +14,24 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements UserRepository {
-    private final JpaUserRepository jpaUserRepository;
-    private final UserMapper userMapper;
+    private final JpaUserRepository userRepository;
+    private final PersistenceUserMapper mapper;
 
     @Override
     public User save(User user) {
-        UserEntity entity = userMapper.toEntity(user);
-        UserEntity savedEntity = jpaUserRepository.save(entity);
-        return userMapper.toDomain(savedEntity);
+        final UserEntity entity = mapper.toEntity(user);
+        final UserEntity savedEntity = userRepository.save(entity);
+        return mapper.toDomain(savedEntity);
     }
 
     @Override
     public Optional<User> findById(UUID id) {
-        return jpaUserRepository.findById(id)
-                .map(userMapper::toDomain);
+        return userRepository.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override
     public void deleteById(UUID id) {
-        jpaUserRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 } 

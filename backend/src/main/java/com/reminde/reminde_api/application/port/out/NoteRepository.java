@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface NoteRepository {
     Note save(Note note);
     Optional<Note> findById(UUID id);
-    List<Note> findByUserId(UUID userId);
+    List<Note> findByOwnerId(UUID ownerId);
     void deleteById(UUID id);
 } 

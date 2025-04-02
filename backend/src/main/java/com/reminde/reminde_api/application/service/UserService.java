@@ -1,37 +1,40 @@
 package com.reminde.reminde_api.application.service;
 
-import com.reminde.reminde_api.application.dto.CreateUserRequest;
-import com.reminde.reminde_api.application.dto.UserDto;
-import com.reminde.reminde_api.application.port.in.UserUseCase;
-import com.reminde.reminde_api.application.port.out.UserRepository;
-import com.reminde.reminde_api.domain.model.User;
-import com.reminde.reminde_api.persistence.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.UUID;
+import com.reminde.reminde_api.application.dto.CreateUserRequest;
+import com.reminde.reminde_api.application.dto.UserDto;
+import com.reminde.reminde_api.application.mappers.DtoUserMapper;
+import com.reminde.reminde_api.application.port.in.UserGateway;
+import com.reminde.reminde_api.application.port.out.UserRepository;
+import com.reminde.reminde_api.domain.model.User;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserService implements UserUseCase {
+public class UserService implements UserGateway {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final DtoUserMapper mapper;
 
     @Override
     public UserDto createUser(CreateUserRequest request) {
-        User user = new User(UUID.randomUUID(), request.name());
+        User user = new User(UUID.randomUUID(), request.name(), request.email(), List.of());
         User savedUser = userRepository.save(user);
-        return userMapper.toDto(savedUser);
+        return mapper.toDto(savedUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDto> getUser(UUID id) {
         return userRepository.findById(id)
-                .map(userMapper::toDto);
+                .map(mapper::toDto);
     }
 
     @Override

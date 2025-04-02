@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record NoteDto(
     UUID id,
+    UUID ownerId,
     String title,
     String content,
     LocalDate dueDate,
     List<String> tags,
-    List<LocalDateTime> reminders,
-    UUID userId
+    List<LocalDateTime> reminders
 ) {} 

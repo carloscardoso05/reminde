@@ -1,4 +1,4 @@
-package com.reminde.reminde_api.persistence.entity;
+package com.reminde.reminde_api.persistence.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,4 +18,5 @@ public class UserEntity {
     @Id
     private UUID id;
     private String name;
+    private String email;
 } 

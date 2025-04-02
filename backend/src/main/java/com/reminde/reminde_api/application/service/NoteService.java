@@ -2,10 +2,10 @@ package com.reminde.reminde_api.application.service;
 
 import com.reminde.reminde_api.application.dto.CreateNoteRequest;
 import com.reminde.reminde_api.application.dto.NoteDto;
-import com.reminde.reminde_api.application.port.in.NoteUseCase;
+import com.reminde.reminde_api.application.mappers.DtoNoteMapper;
+import com.reminde.reminde_api.application.port.in.NoteGateway;
 import com.reminde.reminde_api.application.port.out.NoteRepository;
 import com.reminde.reminde_api.domain.model.Note;
-import com.reminde.reminde_api.persistence.mapper.NoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +17,15 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NoteService implements NoteUseCase {
+public class NoteService implements NoteGateway {
     private final NoteRepository noteRepository;
-    private final NoteMapper noteMapper;
+    private final DtoNoteMapper mapper;
 
     @Override
     public NoteDto createNote(CreateNoteRequest request) {
         Note note = new Note(
             UUID.randomUUID(),
+            request.ownerId(),
             request.title(),
             request.content(),
             request.dueDate(),
@@ -32,22 +33,22 @@ public class NoteService implements NoteUseCase {
             request.reminders()
         );
         Note savedNote = noteRepository.save(note);
-        return noteMapper.toDto(savedNote);
+        return mapper.toDto(savedNote);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<NoteDto> getNote(UUID id) {
         return noteRepository.findById(id)
-                .map(noteMapper::toDto);
+                .map(mapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<NoteDto> getNotesByUser(UUID userId) {
-        return noteRepository.findByUserId(userId)
+    public List<NoteDto> getNotesByOwner(UUID userId) {
+        return noteRepository.findByOwnerId(userId)
                 .stream()
-                .map(noteMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 

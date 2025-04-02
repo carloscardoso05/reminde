@@ -1,4 +1,4 @@
-package com.reminde.reminde_api.persistence.entity;
+package com.reminde.reminde_api.persistence.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,6 @@ import java.util.UUID;
 public class NoteEntity {
     @Id
     private UUID id;
-    
     private String title;
     private String content;
     private LocalDate dueDate;
@@ -34,6 +33,6 @@ public class NoteEntity {
     private List<LocalDateTime> reminders;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
 } 

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface NoteUseCase {
+public interface NoteGateway {
     NoteDto createNote(CreateNoteRequest request);
     Optional<NoteDto> getNote(UUID id);
-    List<NoteDto> getNotesByUser(UUID userId);
+    List<NoteDto> getNotesByOwner(UUID userId);
     void deleteNote(UUID id);
 } 
